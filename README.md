@@ -20,7 +20,7 @@
 
 ## 🥳 News
 
-- **[2026-10-09]** **Skill-MAS is now a default-on orchestration companion for Codex and Claude Code!** Install once, then use your agent as usual: task profiles are selected automatically and work alongside existing skills, with no skill command required. [Quick start](#use-in-codex-or-claude-code).
+- **[2026-10-09]** **Skill-MAS now supports Codex and Claude Code!** After installation, it automatically selects the appropriate optimized skill for the current task and orchestrates the workflow alongside your existing agent skills. [Quick start](#use-in-codex-or-claude-code).
 - **[2026-08-21]** 🎉 **Skill-MAS has been accepted to EMNLP 2026!**
 - **[2026-06-17]** We release the **code** and **paper**: [Skill-MAS: Evolving Meta-Skill for Automatic Multi-Agent Systems](https://arxiv.org/abs/2606.18837).
 
@@ -146,10 +146,11 @@ skills/.../round_r/
 ## Use in Codex or Claude Code
 
 Bring Skill-MAS's **task decomposition → agent engineering → workflow orchestration**
-into your everyday agent workflow. **Install once, then ask for work normally.**
-The portable [`skill-mas`](skills/skill-mas/SKILL.md) automatically selects strategies
-adapted from [`optimized_skill/`](optimized_skill/), uses relevant existing skills,
-and coordinates delegation and verification when the task benefits from them.
+into your everyday agent workflow. **After installation, Skill-MAS automatically
+selects the appropriate optimized skill for the current task and orchestrates
+the workflow alongside your existing skills.** The portable
+[`skill-mas`](skills/skill-mas/SKILL.md) adapts [`optimized_skill/`](optimized_skill/)
+to native agent tools and coordinates delegation and verification as needed.
 Simple questions and small edits stay lightweight. **No benchmark datasets,
 Python packages, or separate model API keys are needed**; your agent's existing
 tools and access apply.
@@ -178,8 +179,7 @@ python3 scripts/install_agent_skill.py --agent both --scope project --project /p
 
 ### Use your agent normally
 
-Open a new agent session in the target project and use ordinary prompts in either
-Codex or Claude Code. No `$skill-mas`, slash command, or `profile=...` is required:
+Open a new Codex or Claude Code session in the target project and describe your task:
 
 ```text
 Compare these three retrieval approaches and recommend one for our project.
@@ -212,8 +212,8 @@ complete the installation in its plugin interface:
 ```
 
 Start a new session and use the same ordinary prompts above. The plugin's
-`SessionStart` hook automatically loads the routing guidance; no per-task command
-is needed. Existing plugin users should update to version **1.1.0** or later.
+`SessionStart` hook loads the routing guidance so the agent can select an optimized
+skill for the current task. Existing plugin users should update to the latest version.
 
 Choose either the plugin or the copy installation for Claude Code to avoid
 duplicate entries. Default routing is implemented through the hosts' instruction

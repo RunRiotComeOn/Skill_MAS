@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo 'Skill-MAS default routing is active. Before planning ordinary substantive coding, research, retrieval, reasoning, or tool tasks, load skill-mas:skill-mas with the Skill tool. Select its profiles automatically and compose with available specialist skills. Keep one orchestration owner if another workflow already coordinates the task; avoid duplicate teams or recursive skill invocation. Simple questions and small indivisible edits can be handled directly. Respect user opt-outs, repository instructions, permissions, and actual tool availability. Subagents stay within their assigned scope. Do not ask the user to type a skill command or choose a profile. Keep normal progress and required approvals visible.'",
+            "command": "echo 'Skill-MAS default routing is active. Before planning ordinary substantive coding, research, retrieval, reasoning, or tool tasks, load skill-mas:skill-mas with the Skill tool. Automatically select the appropriate optimized skill profile for the current task and compose with available specialist skills. Keep one orchestration owner if another workflow already coordinates the task; avoid duplicate teams or recursive skill invocation. Simple questions and small indivisible edits can be handled directly. Respect user opt-outs, repository instructions, permissions, and actual tool availability. Subagents stay within their assigned scope. Keep normal progress and required approvals visible.'",
             "timeout": 10
           }
         ]

@@ -2,9 +2,9 @@
 
 For ordinary substantive coding, research, retrieval, reasoning, and tool tasks,
 read the installed Skill-MAS entry point given below before planning. Apply its
-orchestration guidance automatically; the user does not need to mention the skill
-or select a profile. Simple questions and small indivisible edits can be handled
-directly without loading profiles or creating agents.
+orchestration guidance and automatically select the appropriate optimized skill
+profile for the current task. Simple questions and small indivisible edits can
+be handled directly without loading profiles or creating agents.
 
 Choose the relevant profile from the task: `drb` for research/synthesis,
 `hlemath` for mathematical or logical verification, `bcp` for clue-based retrieval,
@@ -20,5 +20,5 @@ Subagents should complete their assigned scope rather than route the whole task.
 Follow the user's chosen workflow, repository rules, existing permissions, and
 actual tool availability. Honor requests to skip this policy or avoid delegation.
 When delegation is unavailable, work sequentially and say so when relevant.
-Route internally without a profile-selection prompt, while keeping normal
-progress updates and required approvals visible.
+Select strategies from the current task and keep normal progress updates and
+required approvals visible.

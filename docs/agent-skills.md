@@ -2,8 +2,9 @@
 
 The installable package is [`skills/skill-mas/`](../skills/skill-mas/). It contains
 one `SKILL.md` entry point, four task profiles, and default routing guidance.
-Install once and use normal prompts: the main agent chooses a strategy and
-relevant specialist skills, delegates when useful, and verifies the deliverable.
+After installation, the main agent automatically selects the appropriate
+optimized skill for the current task, combines it with relevant existing skills,
+and coordinates execution and verification.
 Execution uses the host's existing tools, model access, and permissions.
 
 ## Install from a clone
@@ -114,7 +115,7 @@ Implement [feature], integrate the changes, and test the result.
 The main agent chooses `drb`, `hlemath`, `bcp`, or `vitabench` by task shape. For
 general software work it uses the base workflow and applicable coding skills.
 Mixed tasks can use different profiles for different branches, without loading
-all profiles up front. You do not need to ask for multiple agents or select skills.
+all profiles up front. Delegation is chosen according to the task and available tools.
 
 Skill-MAS supplies decomposition, handoff contracts, and verification; existing
 domain skills provide their specialist procedures. If another orchestration

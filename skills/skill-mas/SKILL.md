@@ -1,6 +1,6 @@
 ---
 name: skill-mas
-description: "Default orchestration for everyday multi-step coding, research, search, reasoning, and tool tasks. Automatically select Skill-MAS strategies and compose them with available specialist or orchestration skills; delegate independent work when useful and verify the result. No explicit skill command or profile selection is needed."
+description: "Orchestrate everyday multi-step coding, research, search, reasoning, and tool tasks by automatically selecting the appropriate optimized Skill-MAS strategy. Compose it with available specialist or orchestration skills, delegate independent work when useful, and verify the result."
 ---
 
 # Skill-MAS
@@ -11,10 +11,10 @@ Generate a separate MAS program only when the user asks for one.
 
 ## Automatic use and skill composition
 
-Use this policy during ordinary task planning without requiring the user to name
-Skill-MAS, request multiple agents, or choose a profile. For a simple question or
-single small edit, answer or edit directly. For a substantive task, select the
-relevant strategy below and scale delegation to the work. Respect requests to
+Use this policy during ordinary task planning. Select the appropriate optimized
+skill profile from the current task. For a simple question or single small edit,
+answer or edit directly. For a substantive task, load the relevant strategy below
+and scale delegation to the work. Respect requests to
 skip Skill-MAS, avoid delegation, or follow a specific workflow.
 
 Check the session's available skills and repository instructions for the current
@@ -31,9 +31,8 @@ start a second competing plan, duplicate an existing team, or create a cycle of
 skills invoking one another. Give subagents a bounded assignment and the relevant
 profile/specialist guidance; they should not restart whole-task orchestration.
 
-Choose profiles internally and communicate useful progress in the host's normal
-style. Do not ask the user to pick a profile or type a skill command. Background
-routing does not hide tool actions, material uncertainty, or permission requests.
+Choose profiles from the task and communicate useful progress in the host's normal
+style. Keep tool actions, material uncertainty, and permission requests visible.
 
 This is a portable adaptation of the four evolved skills in
 [Skill_MAS/optimized_skill](https://github.com/linhh29/Skill_MAS/tree/main/optimized_skill).

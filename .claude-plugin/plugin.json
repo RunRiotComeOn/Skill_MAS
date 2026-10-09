@@ -1,7 +1,7 @@
 {
   "name": "skill-mas",
-  "version": "1.1.0",
-  "description": "Default-on Skill-MAS orchestration with automatic profile selection and composition with existing skills.",
+  "version": "1.1.1",
+  "description": "Automatically select the appropriate optimized Skill-MAS strategy for the current task and orchestrate work with existing skills.",
   "author": { "name": "Skill-MAS contributors" },
   "homepage": "https://github.com/linhh29/Skill_MAS",
   "repository": "https://github.com/linhh29/Skill_MAS",
