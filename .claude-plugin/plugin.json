@@ -1,0 +1,10 @@
+{
+  "name": "skill-mas",
+  "version": "1.0.0",
+  "description": "Skill-MAS's evolved multi-agent orchestration strategies, adapted for native agent workflows.",
+  "author": { "name": "Skill-MAS contributors" },
+  "homepage": "https://github.com/linhh29/Skill_MAS",
+  "repository": "https://github.com/linhh29/Skill_MAS",
+  "license": "Apache-2.0",
+  "keywords": ["skills", "multi-agent", "orchestration", "research"]
+}

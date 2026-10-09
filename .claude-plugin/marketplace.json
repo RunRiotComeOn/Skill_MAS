@@ -1,0 +1,12 @@
+{
+  "name": "skill-mas-marketplace",
+  "owner": { "name": "Skill-MAS contributors" },
+  "metadata": { "description": "Evolved multi-agent orchestration skills for Claude Code." },
+  "plugins": [
+    {
+      "name": "skill-mas",
+      "source": "./",
+      "description": "Task decomposition, agent engineering, and verified orchestration from Skill-MAS."
+    }
+  ]
+}

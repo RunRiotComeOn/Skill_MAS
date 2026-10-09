@@ -1,0 +1,31 @@
+name: Agent skill installer
+
+on:
+  push:
+    paths:
+      - "scripts/install_agent_skill.py"
+      - "tests/test_install_agent_skill.py"
+      - "skills/**"
+      - ".github/workflows/agent-skills.yml"
+  pull_request:
+    paths:
+      - "scripts/install_agent_skill.py"
+      - "tests/test_install_agent_skill.py"
+      - "skills/**"
+      - ".github/workflows/agent-skills.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  installer:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -B -m unittest discover -s tests -p 'test_install_agent_skill.py' -v

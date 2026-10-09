@@ -20,6 +20,7 @@
 
 ## 🥳 News
 
+- **[2026-10-09]** Our evolved orchestration strategies are now available as an installable **Skill-MAS skill for Codex and Claude Code**! Use native subagents with four task profiles, a dependency-free installer, or the Claude Code plugin. [Quick start](#use-in-codex-or-claude-code).
 - **[2026-06-17]** We release the **code** and **paper**: [Skill-MAS: Evolving Meta-Skill for Automatic Multi-Agent Systems](https://arxiv.org/abs/2606.18837).
 
 
@@ -28,6 +29,7 @@
 ## Table of Contents
 
 - [1. Overview](#1-overview)
+- [Use in Codex or Claude Code](#use-in-codex-or-claude-code)
 - [2. Setup](#2-setup)
 - [3. Demo Inference (Custom Question)](#3-demo-inference-custom-question)
 - [4. Running Evolution](#4-running-evolution)
@@ -57,10 +59,11 @@ Trajectories from each evolution round drive **contrastive reflection** and **sk
   <img src="assert/Method.png" width="1200">
 </p>
 
-**Two ways to use this repo**
+**Three ways to use this repo**
 
 | Path | When to use |
 |------|-------------|
+| 🧩 **[Codex / Claude Code skill](#use-in-codex-or-claude-code)** | Import evolved orchestration strategies into your everyday agent workflow |
 | 🚀 **[Demo Inference](#3-demo-inference-custom-question)** | One question + existing skill → build & run MAS immediately |
 | 🔄 **[Evolution](#4-running-evolution)** | Multi-round skill optimization on benchmark validation sets |
 
@@ -78,6 +81,10 @@ Skill_MAS/
 ├── utils/                # Paths, cost tracking, logging, redaction
 ├── init_skill/           # Initial (pre-evolution) SKILL.md
 ├── optimized_skill/      # Pre-evolved skills per benchmark (ready to test)
+├── skills/skill-mas/      # Portable agent skill + four adapted task profiles
+├── scripts/              # Dependency-free agent skill installer
+├── .claude-plugin/       # Claude Code plugin and marketplace manifests
+├── docs/agent-skills.md   # Installation, profiles, updates, and adaptation notes
 ├── dataset/              # Bundled benchmark code + data
 │   ├── vitabench/        # VitaBench (src/vita, data/)
 │   ├── deep_research_bench/
@@ -131,6 +138,87 @@ skills/.../round_r/
   ├── bank_meta.json    # optimization history
   └── knee_images/      # task-priority elbow plots
 ```
+
+---
+
+## Use in Codex or Claude Code
+
+Bring Skill-MAS's **task decomposition → agent engineering → workflow orchestration**
+into your existing agent. The portable [`skill-mas`](skills/skill-mas/SKILL.md)
+skill adapts the strategies in [`optimized_skill/`](optimized_skill/) to native
+subagents, selects a task profile, and coordinates delegation, verification, and
+synthesis. **No benchmark datasets, Python packages, or separate model API keys
+are needed** for this integration; your agent's existing tools and access apply.
+
+### Install
+
+Clone the repo and run the installer with Python 3.9+:
+
+```bash
+git clone --depth 1 https://github.com/linhh29/Skill_MAS.git
+cd Skill_MAS
+
+# Install for both agents, or choose --agent codex / --agent claude.
+python3 scripts/install_agent_skill.py --agent both
+```
+
+This copies the self-contained skill to `~/.agents/skills/skill-mas` for Codex
+and `~/.claude/skills/skill-mas` for Claude Code (or its `CLAUDE_CONFIG_DIR`).
+For installation in just one project:
+
+```bash
+python3 scripts/install_agent_skill.py --agent both --scope project --project /path/to/your-project
+```
+
+Open a new agent session in the target project. If the skill does not appear,
+restart the agent. Try these prompts:
+
+**Codex**
+
+```text
+$skill-mas profile=drb Compare three approaches to our retrieval pipeline. Delegate independent analyses, verify the evidence, and synthesize a recommendation.
+```
+
+**Claude Code**
+
+```text
+/skill-mas profile=hlemath Solve this combinatorics problem with independent verification, and explain the proof: [your problem]
+```
+
+The profile is optional; the main agent can choose it from the task:
+
+| Profile | Adapted from | Useful for |
+| --- | --- | --- |
+| `drb` | Deep Research Bench | Parallel research and report synthesis |
+| `hlemath` | HLEMath | Shared assumptions, independent reasoning, small-case checks |
+| `bcp` | BrowseComp-Plus | Multi-clue search, candidate comparison, relationship verification |
+| `vitabench` | VitaBench | Tool workflows, structured decisions, dependency-aware execution |
+
+### Claude Code plugin alternative
+
+Instead of the copy installer, run these commands **inside Claude Code** and
+complete the installation in its plugin interface:
+
+```text
+/plugin marketplace add linhh29/Skill_MAS
+/plugin install skill-mas@skill-mas-marketplace
+```
+
+Then invoke the namespaced skill:
+
+```text
+/skill-mas:skill-mas profile=bcp Find the project matching these clues and verify each clue against sources: [your clues]
+```
+
+Choose either the plugin or the copy installation for Claude Code to avoid
+duplicate entries. The skill uses available native delegation; when subagents
+are unavailable, it follows the same workflow sequentially and says so. These
+are adapted orchestration instructions; benchmark results do not establish their
+performance in Codex or Claude Code.
+
+See the [installation and adaptation guide](docs/agent-skills.md) for manual
+installation, updates, removal, source mapping, and troubleshooting. The research
+runtime setup below is only needed for the demo and benchmark workflows.
 
 ---
 
