@@ -1,6 +1,6 @@
 ---
 name: skill-mas
-description: "Orchestrate multi-agent work using Skill-MAS's evolved task decomposition, agent design, and verification strategies. Use for explicit multi-agent requests or complex tasks with independent research, retrieval, reasoning, or tool-workflow branches that benefit from delegation."
+description: "Default orchestration for everyday multi-step coding, research, search, reasoning, and tool tasks. Automatically select Skill-MAS strategies and compose them with available specialist or orchestration skills; delegate independent work when useful and verify the result. No explicit skill command or profile selection is needed."
 ---
 
 # Skill-MAS
@@ -9,6 +9,32 @@ Apply **task decomposition → agent engineering → workflow orchestration** in
 the current agent session. Complete the user's requested task and deliverable.
 Generate a separate MAS program only when the user asks for one.
 
+## Automatic use and skill composition
+
+Use this policy during ordinary task planning without requiring the user to name
+Skill-MAS, request multiple agents, or choose a profile. For a simple question or
+single small edit, answer or edit directly. For a substantive task, select the
+relevant strategy below and scale delegation to the work. Respect requests to
+skip Skill-MAS, avoid delegation, or follow a specific workflow.
+
+Check the session's available skills and repository instructions for the current
+task. Use relevant specialist skills for implementation, research, documents,
+testing, or other domain work; Skill-MAS supplies decomposition, context handoffs,
+and verification. Load only skills needed for this task, and follow their real
+interfaces rather than assuming a skill or tool exists.
+
+Keep **one orchestration owner**. If an existing or user-selected orchestration
+skill already coordinates the work, let it own the plan and scheduling, and use
+the selected Skill-MAS profile to improve its handoff and verification checks.
+Otherwise, coordinate in the main agent and delegate specialist work. Do not
+start a second competing plan, duplicate an existing team, or create a cycle of
+skills invoking one another. Give subagents a bounded assignment and the relevant
+profile/specialist guidance; they should not restart whole-task orchestration.
+
+Choose profiles internally and communicate useful progress in the host's normal
+style. Do not ask the user to pick a profile or type a skill command. Background
+routing does not hide tool actions, material uncertainty, or permission requests.
+
 This is a portable adaptation of the four evolved skills in
 [Skill_MAS/optimized_skill](https://github.com/linhh29/Skill_MAS/tree/main/optimized_skill).
 The references below contain the adapted strategies and identify their sources;
@@ -16,8 +42,8 @@ they do not require the research runtime or benchmark datasets.
 
 ## Choose a profile
 
-Honor an explicit `profile=drb`, `profile=hlemath`, `profile=bcp`, or
-`profile=vitabench` in the user's request. Otherwise select by the task shape.
+Select by the task shape automatically. Honor an explicit `profile=drb`,
+`profile=hlemath`, `profile=bcp`, or `profile=vitabench` if the user supplies one.
 Read the selected reference before planning. For a mixed task, use one primary
 profile and read another only for a branch that needs it.
 

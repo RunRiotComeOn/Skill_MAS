@@ -6,7 +6,7 @@
     {
       "name": "skill-mas",
       "source": "./",
-      "description": "Task decomposition, agent engineering, and verified orchestration from Skill-MAS."
+      "description": "Automatic Skill-MAS orchestration for everyday tasks, alongside existing agent skills."
     }
   ]
 }

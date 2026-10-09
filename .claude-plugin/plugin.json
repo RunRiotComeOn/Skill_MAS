@@ -1,7 +1,7 @@
 {
   "name": "skill-mas",
-  "version": "1.0.0",
-  "description": "Skill-MAS's evolved multi-agent orchestration strategies, adapted for native agent workflows.",
+  "version": "1.1.0",
+  "description": "Default-on Skill-MAS orchestration with automatic profile selection and composition with existing skills.",
   "author": { "name": "Skill-MAS contributors" },
   "homepage": "https://github.com/linhh29/Skill_MAS",
   "repository": "https://github.com/linhh29/Skill_MAS",

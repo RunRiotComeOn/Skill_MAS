@@ -20,7 +20,8 @@
 
 ## 🥳 News
 
-- **[2026-10-09]** Our evolved orchestration strategies are now available as an installable **Skill-MAS skill for Codex and Claude Code**! Use native subagents with four task profiles, a dependency-free installer, or the Claude Code plugin. [Quick start](#use-in-codex-or-claude-code).
+- **[2026-10-09]** **Skill-MAS is now a default-on orchestration companion for Codex and Claude Code!** Install once, then use your agent as usual: task profiles are selected automatically and work alongside existing skills, with no skill command required. [Quick start](#use-in-codex-or-claude-code).
+- **[2026-08-21]** 🎉 **Skill-MAS has been accepted to EMNLP 2026!**
 - **[2026-06-17]** We release the **code** and **paper**: [Skill-MAS: Evolving Meta-Skill for Automatic Multi-Agent Systems](https://arxiv.org/abs/2606.18837).
 
 
@@ -82,8 +83,9 @@ Skill_MAS/
 ├── init_skill/           # Initial (pre-evolution) SKILL.md
 ├── optimized_skill/      # Pre-evolved skills per benchmark (ready to test)
 ├── skills/skill-mas/      # Portable agent skill + four adapted task profiles
-├── scripts/              # Dependency-free agent skill installer
+├── scripts/              # Skill installer + default startup routing
 ├── .claude-plugin/       # Claude Code plugin and marketplace manifests
+├── hooks/                # Claude plugin session-start routing
 ├── docs/agent-skills.md   # Installation, profiles, updates, and adaptation notes
 ├── dataset/              # Bundled benchmark code + data
 │   ├── vitabench/        # VitaBench (src/vita, data/)
@@ -144,11 +146,13 @@ skills/.../round_r/
 ## Use in Codex or Claude Code
 
 Bring Skill-MAS's **task decomposition → agent engineering → workflow orchestration**
-into your existing agent. The portable [`skill-mas`](skills/skill-mas/SKILL.md)
-skill adapts the strategies in [`optimized_skill/`](optimized_skill/) to native
-subagents, selects a task profile, and coordinates delegation, verification, and
-synthesis. **No benchmark datasets, Python packages, or separate model API keys
-are needed** for this integration; your agent's existing tools and access apply.
+into your everyday agent workflow. **Install once, then ask for work normally.**
+The portable [`skill-mas`](skills/skill-mas/SKILL.md) automatically selects strategies
+adapted from [`optimized_skill/`](optimized_skill/), uses relevant existing skills,
+and coordinates delegation and verification when the task benefits from them.
+Simple questions and small edits stay lightweight. **No benchmark datasets,
+Python packages, or separate model API keys are needed**; your agent's existing
+tools and access apply.
 
 ### Install
 
@@ -162,30 +166,29 @@ cd Skill_MAS
 python3 scripts/install_agent_skill.py --agent both
 ```
 
-This copies the self-contained skill to `~/.agents/skills/skill-mas` for Codex
-and `~/.claude/skills/skill-mas` for Claude Code (or its `CLAUDE_CONFIG_DIR`).
+This installs the self-contained skill and enables default startup routing.
+Codex receives a managed block in its `AGENTS.md`; Claude Code receives a dedicated
+`rules/skill-mas.md`. Existing instructions are preserved and changed instruction
+files are backed up. See the [exact paths and controls](docs/agent-skills.md#default-startup-routing).
 For installation in just one project:
 
 ```bash
 python3 scripts/install_agent_skill.py --agent both --scope project --project /path/to/your-project
 ```
 
-Open a new agent session in the target project. If the skill does not appear,
-restart the agent. Try these prompts:
+### Use your agent normally
 
-**Codex**
-
-```text
-$skill-mas profile=drb Compare three approaches to our retrieval pipeline. Delegate independent analyses, verify the evidence, and synthesize a recommendation.
-```
-
-**Claude Code**
+Open a new agent session in the target project and use ordinary prompts in either
+Codex or Claude Code. No `$skill-mas`, slash command, or `profile=...` is required:
 
 ```text
-/skill-mas profile=hlemath Solve this combinatorics problem with independent verification, and explain the proof: [your problem]
+Compare these three retrieval approaches and recommend one for our project.
+Solve this combinatorics problem and explain the proof: [your problem]
+Find the project matching these clues and verify the sources: [your clues]
+Implement this feature, integrate the changes, and check that it works.
 ```
 
-The profile is optional; the main agent can choose it from the task:
+Skill-MAS selects the relevant strategy internally:
 
 | Profile | Adapted from | Useful for |
 | --- | --- | --- |
@@ -193,6 +196,10 @@ The profile is optional; the main agent can choose it from the task:
 | `hlemath` | HLEMath | Shared assumptions, independent reasoning, small-case checks |
 | `bcp` | BrowseComp-Plus | Multi-clue search, candidate comparison, relationship verification |
 | `vitabench` | VitaBench | Tool workflows, structured decisions, dependency-aware execution |
+
+Specialist skills handle their own domains. If an existing orchestration skill
+already coordinates a task, Skill-MAS adds handoff and verification guidance to
+that workflow, keeping one plan and avoiding duplicate agent teams.
 
 ### Claude Code plugin alternative
 
@@ -204,14 +211,14 @@ complete the installation in its plugin interface:
 /plugin install skill-mas@skill-mas-marketplace
 ```
 
-Then invoke the namespaced skill:
-
-```text
-/skill-mas:skill-mas profile=bcp Find the project matching these clues and verify each clue against sources: [your clues]
-```
+Start a new session and use the same ordinary prompts above. The plugin's
+`SessionStart` hook automatically loads the routing guidance; no per-task command
+is needed. Existing plugin users should update to version **1.1.0** or later.
 
 Choose either the plugin or the copy installation for Claude Code to avoid
-duplicate entries. The skill uses available native delegation; when subagents
+duplicate entries. Default routing is implemented through the hosts' instruction
+and hook mechanisms; Skill-MAS is an installed extension, not an official bundled
+component. The skill uses available native delegation; when subagents
 are unavailable, it follows the same workflow sequentially and says so. These
 are adapted orchestration instructions; benchmark results do not establish their
 performance in Codex or Claude Code.
