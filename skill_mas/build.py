@@ -91,7 +91,7 @@ SyncTextCallFn = Callable[[str], tuple[str, dict[str, Any]]]
 AsyncToolCallFn = Callable[[Any], Awaitable[tuple[str, dict[str, Any]]]]
 SyncToolCallFn = Callable[[Any], tuple[str, dict[str, Any]]]
 
-TOOL_EXECUTION_MODES = ("llm_only", "multi_turn_search", "vita_tool")
+TOOL_EXECUTION_MODES = ("llm_only", "multi_turn_search", "vita_tool", "env_tool")
 
 # When Stage-2 omits user_prompt, use a short embed-safe default (full task is in GLOBAL TASK CONTEXT at runtime).
 _RUNTIME_USER_PROMPT_FALLBACK = (
@@ -138,6 +138,8 @@ def _normalize_dataset_name(dataset_name: str | None) -> str:
         return "bcp"
     if s in {"vita", "vitabench"}:
         return "vita"
+    if s in {"workbench", "wb"}:
+        return "workbench"
     raise ValueError(
         "Unsupported dataset_name. Expected one of: "
         "hlemath|hle, drb|drb_bridge, bcp|browsecomp, vita|vitabench; "
@@ -183,6 +185,16 @@ def _dataset_final_requirement_text(normalized_dataset: str) -> str:
             "Never assign a sub-agent instructions that forbid booking or purchasing when the task requires a "
             "completed transaction. Names like *_search only are discouraged when the rubric expects a "
             "completed purchase or reservation — prefer sub-task intents that match **done** actions."
+        )
+    if d == "workbench":
+        return (
+            "WorkBench (workplace tool use: email, calendar, analytics, project management, CRM): grading compares "
+            "the final sandbox database state produced by the executed tool calls against the ground truth. "
+            "Only actions actually executed through the environment tools count; a natural-language answer or plan "
+            "does not change the state. Perform every required write action (send/reply/forward/delete email, "
+            "create/update/delete event or task, add/update/delete customer, create plot) without asking for "
+            "confirmation, and do not perform write actions the request does not ask for. The final deliverable is a "
+            "brief summary of what was done."
         )
     raise ValueError(
         "Dataset not specified or generic: infer the intended deliverable and evaluation style from "
@@ -377,6 +389,8 @@ def _allowed_tool_modes_for_dataset(dataset_name: str) -> set[str]:
         return {"multi_turn_search"}
     if dataset_name == "vita":
         return {"vita_tool"}
+    if dataset_name == "workbench":
+        return {"env_tool", "llm_only"}
     raise ValueError(
         "Unsupported dataset_name. Expected one of: "
         "hlemath|hle, drb|drb_bridge, bcp|browsecomp, vita|vitabench; "
@@ -388,6 +402,8 @@ def _default_execution_mode_for_dataset(allowed: set[str]) -> str:
     """When the model omits execution_mode or picks one illegal for this dataset, fall back legally."""
     if len(allowed) == 1:
         return next(iter(allowed))
+    if "env_tool" in allowed:
+        return "env_tool"
     if "llm_only" in allowed:
         return "llm_only"
     return sorted(allowed)[0]
@@ -1815,6 +1831,12 @@ async def run_three_stage_skill_build_with_trace(
         )
     elif normalized_dataset == "hlemath":
         s2_constraints.append(_hlemath_stage2_build_constraints())
+    elif normalized_dataset == "workbench":
+        s2_constraints.append(
+            'For WorkBench, sub-agents that must read or change the workplace sandbox use {"execution_mode":"env_tool"} '
+            "(they get the email/calendar/analytics/project/CRM/directory tools and act on one shared sandbox); "
+            'pure reasoning nodes may use {"execution_mode":"llm_only"}.'
+        )
     else:
         s2_constraints.append(
             'For sub-tasks that do not use tools, set tool_context to {"execution_mode":"llm_only"}; do not use null for tool_context.'
@@ -1827,7 +1849,7 @@ async def run_three_stage_skill_build_with_trace(
     s2_schema = (
         '{ "sub_agents": ['
         '{"role_name":"...", "role_instruction":"...", "user_prompt":"...", '
-        '"tool_context": {"execution_mode":"llm_only|multi_turn_search|vita_tool", "...":"..."} }'
+        '"tool_context": {"execution_mode":"llm_only|multi_turn_search|vita_tool|env_tool", "...":"..."} }'
         '], "reasoning": "brief rationale: role split, ordering, and execution_mode choices vs Stage 1. '
         'IMPORTANT: role_instruction defines the agent\'s role and behavioral boundaries; user_prompt provides '
         'the concrete task input. Neither should contain solution content or attempt to answer the question." }'

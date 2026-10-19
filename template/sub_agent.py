@@ -196,7 +196,7 @@ class SubAgentRequest:
                 usage=merged,
                 request_payload=request_payload,
             )
-        elif str(tc.get("execution_mode", "")).strip().lower() == "vita_tool" and tool_call_fn is not None:
+        elif str(tc.get("execution_mode", "")).strip().lower() in ("vita_tool", "env_tool") and tool_call_fn is not None:
             # ── VitaBench two-phase execution ──
             # Phase 1 (Reasoning): Use text_call_fn (no tools) to first understand the sub-task,
             # extract key constraints, and formulate a structured action plan. This prevents the

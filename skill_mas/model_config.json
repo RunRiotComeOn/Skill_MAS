@@ -7,7 +7,9 @@
     "base_url": "xx",
     "temperature": 1.0,
     "max_tokens": 32768,
-    "extra_body": {"enable_thinking": false}
+    "extra_body": {
+      "enable_thinking": false
+    }
   },
   "qwen3.5-plus-2026-02-15": {
     "input_per_1m": 0.1143,
@@ -16,7 +18,9 @@
     "base_url": "xx",
     "temperature": 1.0,
     "max_tokens": 32768,
-    "extra_body": {"enable_thinking": false}
+    "extra_body": {
+      "enable_thinking": false
+    }
   },
   "qwen3-max": {
     "input_per_1m": 0.3571,
@@ -36,7 +40,7 @@
   },
   "gemini-3.1-flash-lite-preview": {
     "input_per_1m": 0.25,
-    "output_per_1m": 1.50,
+    "output_per_1m": 1.5,
     "reasoning_effort": "low",
     "api_key": "${OPENAI_API_KEY}",
     "base_url": "xx",
@@ -44,7 +48,7 @@
     "max_tokens": 32768
   },
   "gpt-5.4-nano": {
-    "input_per_1m": 0.20,
+    "input_per_1m": 0.2,
     "output_per_1m": 1.25,
     "reasoning_effort": "low",
     "api_key": "${OPENAI_API_KEY}",
@@ -54,7 +58,7 @@
   },
   "gpt-5.4-mini": {
     "input_per_1m": 0.75,
-    "output_per_1m": 4.50,
+    "output_per_1m": 4.5,
     "reasoning_effort": "low",
     "api_key": "${OPENAI_API_KEY}",
     "base_url": "xx",
@@ -81,8 +85,8 @@
   "deepseek-chat": {
     "input_per_1m": 0.1428,
     "output_per_1m": 0.2857,
-    "api_key": "${OPENAI_API_KEY}",
-    "base_url": "xx",
+    "api_key": "${DEEPSEEK_API_KEY}",
+    "base_url": "https://api.deepseek.com",
     "temperature": 1.0,
     "max_tokens": 32768
   }
