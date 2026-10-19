@@ -156,13 +156,20 @@ async def run_local_contrastive_reflection_async(
             input_char_count=ic,
             estimated_input_tokens=et,
         )
-        text, usage = await client.generate(
-            system_prompt=SYS_CONTRASTIVE_PHASE1,
-            user_prompt=user,
-            **extras,
-            response_format=_contrastive_json_object_response_format(),
-        )
-        obj = json.loads(_strip_json_fence(text))
+        # The optimizer occasionally returns malformed JSON; one bad task must not abort the round.
+        for attempt in range(3):
+            text, usage = await client.generate(
+                system_prompt=SYS_CONTRASTIVE_PHASE1,
+                user_prompt=user,
+                **extras,
+                response_format=_contrastive_json_object_response_format(),
+            )
+            try:
+                obj = json.loads(_strip_json_fence(text))
+                break
+            except json.JSONDecodeError:
+                if attempt == 2:
+                    raise
         return tid, obj, dict(usage or {}), traj_payloads, ic, et
 
     try:
@@ -217,12 +224,19 @@ async def run_local_contrastive_reflection_async(
             input_char_count=p2_ic,
             estimated_input_tokens=p2_et,
         )
-        text2, usage2 = await client.generate(
-            system_prompt=SYS_CONTRASTIVE_PHASE2,
-            user_prompt=user2,
-            **extras,
-            response_format=_contrastive_json_object_response_format(),
-        )
+        for attempt in range(3):
+            text2, usage2 = await client.generate(
+                system_prompt=SYS_CONTRASTIVE_PHASE2,
+                user_prompt=user2,
+                **extras,
+                response_format=_contrastive_json_object_response_format(),
+            )
+            try:
+                json.loads(_strip_json_fence(text2))
+                break
+            except json.JSONDecodeError:
+                if attempt == 2:
+                    raise
         usage_reports.append(
             optimizer_call_report(
                 phase="contrastive_reflection_phase2",
