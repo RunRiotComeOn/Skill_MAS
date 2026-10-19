@@ -51,6 +51,19 @@ def _strip_json_fence(text: str) -> str:
     return t
 
 
+
+def _loads_first_json_object(text: str) -> Any:
+    """Parse the optimizer's JSON reply, ignoring trailing text after the first complete object."""
+    raw = _strip_json_fence(text)
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        start = raw.find("{")
+        if start < 0:
+            raise
+        obj, _end = json.JSONDecoder().raw_decode(raw[start:])
+        return obj
+
 def _record_payload(rec: TrajectoryRecord) -> dict[str, Any]:
     raw_path = Path(rec.raw_result_path)
     if not raw_path.is_file():
@@ -165,7 +178,7 @@ async def run_local_contrastive_reflection_async(
                 response_format=_contrastive_json_object_response_format(),
             )
             try:
-                obj = json.loads(_strip_json_fence(text))
+                obj = _loads_first_json_object(text)
                 break
             except json.JSONDecodeError:
                 if attempt == 2:
@@ -232,7 +245,7 @@ async def run_local_contrastive_reflection_async(
                 response_format=_contrastive_json_object_response_format(),
             )
             try:
-                json.loads(_strip_json_fence(text2))
+                _loads_first_json_object(text2)
                 break
             except json.JSONDecodeError:
                 if attempt == 2:
@@ -244,7 +257,7 @@ async def run_local_contrastive_reflection_async(
                 usage=dict(usage2 or {}),
             )
         )
-        payload2 = json.loads(_strip_json_fence(text2))
+        payload2 = _loads_first_json_object(text2)
         synthesis = payload2.get("cross_sample_synthesis") or {}
         meta = payload2.get("meta_analysis") or {}
 
